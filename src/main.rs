@@ -101,7 +101,8 @@ fn main(event_loop: EventLoopHandle, events: EventReceiver) {
             compiled_wasm_module_store: None,
         };
 
-        let js_path = Path::new(env!("CARGO_MANIFEST_DIR")).join("test.js");
+        let path = std::env::args().nth(1).unwrap_or(String::from("test.js"));
+        let js_path = Path::new(env!("CARGO_MANIFEST_DIR")).join(path);
         let main_module = deno_runtime::deno_core::resolve_path(&js_path.to_string_lossy()).unwrap();
         let permissions = Permissions::allow_all();
 

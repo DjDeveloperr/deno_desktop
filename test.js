@@ -59,17 +59,19 @@ function frame() {
   Deno.core.print(`\rFPS: ${fps} `);
 }
 
+// Call this in main loop
+const loop = setInterval(() => win.requestRedraw(), 1000 / 60);
+
 for await (const event of Deno.eventLoop()) {
   if (event.type === "windowEvent") {
     if (event.windowID !== win.id) continue;
 
     if (event.event.type === "closeRequested") {
+      clearInterval(loop);
       Deno.exit(0);
     }
   } else if (event.type === "redrawRequested") {
     frame();
-  } else if (event.type === "redrawEventsCleared") {
-    win.requestRedraw();
   } else if (event.type === "blocker") {
     Deno.unblock();
   }
