@@ -30,8 +30,7 @@ const surface = win.createSurface(device, {
 const format = surface.getPreferredFormat();
 surface.configure({ format });
 
-const app = new App(device);
-
+const app = new App(device, format);
 await app.init();
 
 let times = [], fps;

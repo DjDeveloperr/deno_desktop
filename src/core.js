@@ -51,7 +51,8 @@ class GPUCanvasContext {
     });
     return ({
       Bgra8UnormSrgb: "bgra8unorm-srgb",
-    })[format];
+      Rgba8UnormSrgb: "rgba8unorm-srgb",
+    })[format] ?? "bgra8unorm-srgb";
   }
 
   configure(options = {}) {
