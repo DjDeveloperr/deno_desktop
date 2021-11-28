@@ -624,11 +624,9 @@ version = "0.1.0"
 dependencies = [
  "deno_runtime",
  "lazy_static",
- "raw-window-handle",
  "serde",
  "tokio",
  "wgpu-core",
- "wgpu-types",
  "winit-main",
 ]
 
