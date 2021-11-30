@@ -180,6 +180,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "cf1de2fe8c75bc145a2f577add951f8134889b4795d47466a54a5c846d691693"
 
 [[package]]
+name = "bitflags_serde_shim"
+version = "0.2.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "25c3d626f0280ec39b33a6fc5c6c1067432b4c41e94aee40ded197a6649bf025"
+dependencies = [
+ "bitflags",
+ "serde",
+]
+
+[[package]]
 name = "block"
 version = "0.1.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -557,7 +567,7 @@ dependencies = [
 [[package]]
 name = "deno_broadcast_channel"
 version = "0.21.0"
-source = "git+https://github.com/DjDeveloperr/deno.git?branch=ext-webgpu-public#0b6f01b0ee13a505482c434c107e0b2168f6861d"
+source = "git+https://github.com/DjDeveloperr/deno.git?rev=ef37c603fe446b38d079e71c56e77c0eda342c99#ef37c603fe446b38d079e71c56e77c0eda342c99"
 dependencies = [
  "async-trait",
  "deno_core",
@@ -568,7 +578,7 @@ dependencies = [
 [[package]]
 name = "deno_console"
 version = "0.27.0"
-source = "git+https://github.com/DjDeveloperr/deno.git?branch=ext-webgpu-public#0b6f01b0ee13a505482c434c107e0b2168f6861d"
+source = "git+https://github.com/DjDeveloperr/deno.git?rev=ef37c603fe446b38d079e71c56e77c0eda342c99#ef37c603fe446b38d079e71c56e77c0eda342c99"
 dependencies = [
  "deno_core",
 ]
@@ -576,7 +586,7 @@ dependencies = [
 [[package]]
 name = "deno_core"
 version = "0.109.0"
-source = "git+https://github.com/DjDeveloperr/deno.git?branch=ext-webgpu-public#0b6f01b0ee13a505482c434c107e0b2168f6861d"
+source = "git+https://github.com/DjDeveloperr/deno.git?rev=ef37c603fe446b38d079e71c56e77c0eda342c99#ef37c603fe446b38d079e71c56e77c0eda342c99"
 dependencies = [
  "anyhow",
  "futures",
@@ -596,7 +606,7 @@ dependencies = [
 [[package]]
 name = "deno_crypto"
 version = "0.41.0"
-source = "git+https://github.com/DjDeveloperr/deno.git?branch=ext-webgpu-public#0b6f01b0ee13a505482c434c107e0b2168f6861d"
+source = "git+https://github.com/DjDeveloperr/deno.git?rev=ef37c603fe446b38d079e71c56e77c0eda342c99#ef37c603fe446b38d079e71c56e77c0eda342c99"
 dependencies = [
  "aes",
  "block-modes",
@@ -626,14 +636,13 @@ dependencies = [
  "lazy_static",
  "serde",
  "tokio",
- "wgpu-core",
  "winit-main",
 ]
 
 [[package]]
 name = "deno_fetch"
 version = "0.50.0"
-source = "git+https://github.com/DjDeveloperr/deno.git?branch=ext-webgpu-public#0b6f01b0ee13a505482c434c107e0b2168f6861d"
+source = "git+https://github.com/DjDeveloperr/deno.git?rev=ef37c603fe446b38d079e71c56e77c0eda342c99#ef37c603fe446b38d079e71c56e77c0eda342c99"
 dependencies = [
  "bytes",
  "data-url",
@@ -650,7 +659,7 @@ dependencies = [
 [[package]]
 name = "deno_ffi"
 version = "0.14.0"
-source = "git+https://github.com/DjDeveloperr/deno.git?branch=ext-webgpu-public#0b6f01b0ee13a505482c434c107e0b2168f6861d"
+source = "git+https://github.com/DjDeveloperr/deno.git?rev=ef37c603fe446b38d079e71c56e77c0eda342c99#ef37c603fe446b38d079e71c56e77c0eda342c99"
 dependencies = [
  "deno_core",
  "dlopen",
@@ -663,7 +672,7 @@ dependencies = [
 [[package]]
 name = "deno_http"
 version = "0.19.0"
-source = "git+https://github.com/DjDeveloperr/deno.git?branch=ext-webgpu-public#0b6f01b0ee13a505482c434c107e0b2168f6861d"
+source = "git+https://github.com/DjDeveloperr/deno.git?rev=ef37c603fe446b38d079e71c56e77c0eda342c99#ef37c603fe446b38d079e71c56e77c0eda342c99"
 dependencies = [
  "base64",
  "bytes",
@@ -679,7 +688,7 @@ dependencies = [
 [[package]]
 name = "deno_net"
 version = "0.19.0"
-source = "git+https://github.com/DjDeveloperr/deno.git?branch=ext-webgpu-public#0b6f01b0ee13a505482c434c107e0b2168f6861d"
+source = "git+https://github.com/DjDeveloperr/deno.git?rev=ef37c603fe446b38d079e71c56e77c0eda342c99#ef37c603fe446b38d079e71c56e77c0eda342c99"
 dependencies = [
  "deno_core",
  "deno_tls",
@@ -693,7 +702,7 @@ dependencies = [
 [[package]]
 name = "deno_runtime"
 version = "0.35.0"
-source = "git+https://github.com/DjDeveloperr/deno.git?branch=ext-webgpu-public#0b6f01b0ee13a505482c434c107e0b2168f6861d"
+source = "git+https://github.com/DjDeveloperr/deno.git?rev=ef37c603fe446b38d079e71c56e77c0eda342c99#ef37c603fe446b38d079e71c56e77c0eda342c99"
 dependencies = [
  "atty",
  "deno_broadcast_channel",
@@ -738,7 +747,7 @@ dependencies = [
 [[package]]
 name = "deno_timers"
 version = "0.25.0"
-source = "git+https://github.com/DjDeveloperr/deno.git?branch=ext-webgpu-public#0b6f01b0ee13a505482c434c107e0b2168f6861d"
+source = "git+https://github.com/DjDeveloperr/deno.git?rev=ef37c603fe446b38d079e71c56e77c0eda342c99#ef37c603fe446b38d079e71c56e77c0eda342c99"
 dependencies = [
  "deno_core",
  "tokio",
@@ -747,7 +756,7 @@ dependencies = [
 [[package]]
 name = "deno_tls"
 version = "0.14.0"
-source = "git+https://github.com/DjDeveloperr/deno.git?branch=ext-webgpu-public#0b6f01b0ee13a505482c434c107e0b2168f6861d"
+source = "git+https://github.com/DjDeveloperr/deno.git?rev=ef37c603fe446b38d079e71c56e77c0eda342c99#ef37c603fe446b38d079e71c56e77c0eda342c99"
 dependencies = [
  "deno_core",
  "lazy_static",
@@ -762,7 +771,7 @@ dependencies = [
 [[package]]
 name = "deno_url"
 version = "0.27.0"
-source = "git+https://github.com/DjDeveloperr/deno.git?branch=ext-webgpu-public#0b6f01b0ee13a505482c434c107e0b2168f6861d"
+source = "git+https://github.com/DjDeveloperr/deno.git?rev=ef37c603fe446b38d079e71c56e77c0eda342c99#ef37c603fe446b38d079e71c56e77c0eda342c99"
 dependencies = [
  "deno_core",
  "serde",
@@ -773,7 +782,7 @@ dependencies = [
 [[package]]
 name = "deno_web"
 version = "0.58.0"
-source = "git+https://github.com/DjDeveloperr/deno.git?branch=ext-webgpu-public#0b6f01b0ee13a505482c434c107e0b2168f6861d"
+source = "git+https://github.com/DjDeveloperr/deno.git?rev=ef37c603fe446b38d079e71c56e77c0eda342c99#ef37c603fe446b38d079e71c56e77c0eda342c99"
 dependencies = [
  "async-trait",
  "base64",
@@ -787,7 +796,7 @@ dependencies = [
 [[package]]
 name = "deno_webgpu"
 version = "0.28.0"
-source = "git+https://github.com/DjDeveloperr/deno.git?branch=ext-webgpu-public#0b6f01b0ee13a505482c434c107e0b2168f6861d"
+source = "git+https://github.com/DjDeveloperr/deno.git?rev=ef37c603fe446b38d079e71c56e77c0eda342c99#ef37c603fe446b38d079e71c56e77c0eda342c99"
 dependencies = [
  "deno_core",
  "serde",
@@ -799,7 +808,7 @@ dependencies = [
 [[package]]
 name = "deno_webidl"
 version = "0.27.0"
-source = "git+https://github.com/DjDeveloperr/deno.git?branch=ext-webgpu-public#0b6f01b0ee13a505482c434c107e0b2168f6861d"
+source = "git+https://github.com/DjDeveloperr/deno.git?rev=ef37c603fe446b38d079e71c56e77c0eda342c99#ef37c603fe446b38d079e71c56e77c0eda342c99"
 dependencies = [
  "deno_core",
 ]
@@ -807,7 +816,7 @@ dependencies = [
 [[package]]
 name = "deno_websocket"
 version = "0.32.0"
-source = "git+https://github.com/DjDeveloperr/deno.git?branch=ext-webgpu-public#0b6f01b0ee13a505482c434c107e0b2168f6861d"
+source = "git+https://github.com/DjDeveloperr/deno.git?rev=ef37c603fe446b38d079e71c56e77c0eda342c99#ef37c603fe446b38d079e71c56e77c0eda342c99"
 dependencies = [
  "deno_core",
  "deno_tls",
@@ -822,7 +831,7 @@ dependencies = [
 [[package]]
 name = "deno_webstorage"
 version = "0.22.0"
-source = "git+https://github.com/DjDeveloperr/deno.git?branch=ext-webgpu-public#0b6f01b0ee13a505482c434c107e0b2168f6861d"
+source = "git+https://github.com/DjDeveloperr/deno.git?rev=ef37c603fe446b38d079e71c56e77c0eda342c99#ef37c603fe446b38d079e71c56e77c0eda342c99"
 dependencies = [
  "deno_core",
  "deno_web",
@@ -1034,12 +1043,6 @@ dependencies = [
  "redox_syscall",
  "winapi 0.3.9",
 ]
-
-[[package]]
-name = "fixedbitset"
-version = "0.4.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "398ea4fabe40b9b0d885340a2a991a44c8a645624075ad966d21f88688e2b69e"
 
 [[package]]
 name = "flate2"
@@ -1383,6 +1386,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "hexf-parse"
+version = "0.2.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "dfa686283ad6dd069f105e5ab091b04c62850d3e4cf5d67debad1933f55023df"
+
+[[package]]
 name = "hmac"
 version = "0.11.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1501,6 +1510,7 @@ checksum = "824845a0bf897a9042383849b02c1bc219c2383772efcd5c6f9766fa4b81aef3"
 dependencies = [
  "autocfg 1.0.1",
  "hashbrown 0.9.1",
+ "serde",
 ]
 
 [[package]]
@@ -1894,17 +1904,18 @@ dependencies = [
 
 [[package]]
 name = "naga"
-version = "0.6.3"
+version = "0.7.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8c5859e55c51da10b98e7a73068e0a0c5da7bbcae4fc38f86043d0c6d1b917cf"
+checksum = "eda66d09f712e1f0a6ab436137da4fac312f78301f6d4ac7cb8bfe96e988734f"
 dependencies = [
  "bit-set",
  "bitflags",
  "codespan-reporting",
  "fxhash",
+ "hexf-parse",
+ "indexmap",
  "log",
  "num-traits",
- "petgraph",
  "serde",
  "spirv",
  "thiserror",
@@ -2227,16 +2238,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "10f4872ae94d7b90ae48754df22fd42ad52ce740b8f370b03da4835417403e53"
 dependencies = [
  "ucd-trie",
-]
-
-[[package]]
-name = "petgraph"
-version = "0.6.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4a13a2fa9d0b63e5f22328828741e523766fff0ee9e779316902290dff3f824f"
-dependencies = [
- "fixedbitset",
- "indexmap",
 ]
 
 [[package]]
@@ -2791,7 +2792,7 @@ dependencies = [
 [[package]]
 name = "serde_v8"
 version = "0.20.0"
-source = "git+https://github.com/DjDeveloperr/deno.git?branch=ext-webgpu-public#0b6f01b0ee13a505482c434c107e0b2168f6861d"
+source = "git+https://github.com/DjDeveloperr/deno.git?rev=ef37c603fe446b38d079e71c56e77c0eda342c99#ef37c603fe446b38d079e71c56e77c0eda342c99"
 dependencies = [
  "serde",
  "serde_bytes",
@@ -3592,9 +3593,9 @@ dependencies = [
 
 [[package]]
 name = "wgpu-core"
-version = "0.10.4"
+version = "0.11.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f963c62473a36e3cef6c58181f2ed6d0d38d2043d970dbed46cb197190090c99"
+checksum = "3bdcbfa4885b32c2b1feb2faeb8b6a76065b752b8f08751b82f994e937687f46"
 dependencies = [
  "arrayvec",
  "bitflags",
@@ -3616,9 +3617,9 @@ dependencies = [
 
 [[package]]
 name = "wgpu-hal"
-version = "0.10.7"
+version = "0.11.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "27cd894b17bff1958ee93da1cc991fd64bf99667746d4bd2a7403855f4d37fe2"
+checksum = "0e493835d9edb153d5c8a9d8d016e1811dbe32ddb707a110be1453c7b051d3ec"
 dependencies = [
  "arrayvec",
  "ash",
@@ -3633,6 +3634,7 @@ dependencies = [
  "gpu-alloc",
  "gpu-descriptor",
  "inplace_it",
+ "js-sys",
  "khronos-egl",
  "libloading 0.7.2",
  "log",
@@ -3640,21 +3642,25 @@ dependencies = [
  "naga",
  "objc",
  "parking_lot",
+ "profiling",
  "range-alloc",
  "raw-window-handle",
  "renderdoc-sys",
  "thiserror",
+ "wasm-bindgen",
+ "web-sys",
  "wgpu-types",
  "winapi 0.3.9",
 ]
 
 [[package]]
 name = "wgpu-types"
-version = "0.10.0"
+version = "0.11.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "25feb2fbf24ab3219a9f10890ceb8e1ef02b13314ed89d64a9ae99dcad883e18"
+checksum = "e15e44ba88ec415466e18e91881319e7c9e96cb905dc623305168aea65b85ccc"
 dependencies = [
  "bitflags",
+ "bitflags_serde_shim",
  "serde",
 ]
 

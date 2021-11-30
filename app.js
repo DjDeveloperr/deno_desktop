@@ -1,5 +1,5 @@
 export class App {
-  constructor(device, format) {
+  constructor({ device, format }) {
     this.device = device;
     this.format = format;
   }

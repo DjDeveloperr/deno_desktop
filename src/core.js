@@ -5,15 +5,27 @@ Deno.eventLoop = async function* () {
   }
 };
 
-Deno.unblock = function () {
-  Deno.core.opSync("op_drop_blocker");
-};
-
 Deno.createWindow = function (options) {
   return new WinitWindow(Deno.core.opSync("op_create_window", options), options);
 };
 
-let symRid;
+let symbolCache = {};
+
+function getSymbolOf(obj, name) {
+  if (symbolCache[name]) {
+    return symbolCache[name];
+  }
+  const symbol = Object.getOwnPropertySymbols(obj).find((symbol) => symbol.description === name);
+  if (!symbol) {
+    throw new Error(`No symbol ${name} found`);
+  }
+  symbolCache[name] = symbol;
+  return symbol;
+}
+
+function getRidOf(obj) {
+  return obj[getSymbolOf(obj, "[[rid]]")];
+}
 
 class GPUCanvasContext {
   #window;
@@ -35,36 +47,26 @@ class GPUCanvasContext {
         format: "bgra8unorm-srgb",
         usage: GPUTextureUsage.RENDER_ATTACHMENT,
       });
-
-      if (!symRid) {
-        const symbols = Object.getOwnPropertySymbols(this.#baseTex);
-        symRid = symbols.find((sym) => sym.description === "[[rid]]");
-      }
-      Deno.close(this.#baseTex[symRid]);
+      this.#baseTex.destroy();
     }
   }
 
   getPreferredFormat() {
-    const format = Deno.core.opSync("op_webgpu_surface_get_preferred_format", {
+    return Deno.core.opSync("op_webgpu_surface_get_preferred_format", {
       surfaceRid: this.#rid,
       adapterRid: this.#rids.adapter,
     });
-    return ({
-      Bgra8UnormSrgb: "bgra8unorm-srgb",
-      Rgba8UnormSrgb: "rgba8unorm-srgb",
-    })[format] ?? "bgra8unorm-srgb";
   }
 
   configure(options = {}) {
-    const done = Deno.core.opSync("op_webgpu_configure_surface", {
+    Deno.core.opSync("op_webgpu_configure_surface", {
       surfaceRid: this.#rid,
+      deviceRid: this.#rids.device,
       format: options.format ?? this.getPreferredFormat(),
       width: options.width ?? this.#window.width,
       height: options.height ?? this.#window.height,
       usage: options.usage ?? GPUTextureUsage.RENDER_ATTACHMENT,
-      deviceRid: this.#rids.device,
     });
-    if (!done) throw new Error("failed");
   }
 
   present() {
@@ -82,12 +84,12 @@ class GPUCanvasContext {
         adapterRid: this.#rids.adapter,
       }
     );
-    this.#baseTex[symRid] = currentTextureRid;
+    this.#baseTex[getSymbolOf(this.#baseTex, "[[rid]]")] = currentTextureRid;
     return this.#baseTex;
   }
 
-  getRidOf(obj) {
-    return obj[symRid];
+  destroy() {
+    Deno.core.opSync("op_webgpu_surface_drop", this.#rid);
   }
 }
 
@@ -134,9 +136,13 @@ class WinitWindow {
     Deno.core.opSync("op_window_request_redraw", this.#rid);
   }
 
-  createSurface(device, rids) {
+  createSurface(device) {
     const rid = Deno.core.opSync("op_webgpu_create_surface", { windowRid: this.#rid });
-    return new GPUCanvasContext(this, rid, rids, device);
+    const adapter = device[getSymbolOf(device, "[[device]]")].adapter;
+    return new GPUCanvasContext(this, rid, {
+      device: device[getSymbolOf(device, "[[device]]")].rid,
+      adapter: adapter[getSymbolOf(adapter, "[[adapter]]")].rid,
+    }, device);
   }
 
   close() {

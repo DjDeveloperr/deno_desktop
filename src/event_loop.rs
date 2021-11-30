@@ -1,6 +1,8 @@
 use std::cell::RefCell;
 use std::rc::Rc;
 
+use deno_runtime::deno_core::Extension;
+use deno_runtime::deno_core::op_async;
 use deno_runtime::deno_core::OpState;
 use deno_runtime::deno_core::error::AnyError;
 use serde::Serialize;
@@ -21,7 +23,6 @@ use winit_main::reexports::event::WindowEvent;
 use winit_main::reexports::window::Theme;
 use crate::util::hash;
 use crate::EVENT_RECEIVER;
-use crate::BLOCKER;
 
 fn serialize_physical_size<T: Serialize>(size: PhysicalSize<T>) -> Value {
     json!({ "width": size.width, "height": size.height })
@@ -164,10 +165,7 @@ pub fn serialize_event<'a>(event: Event<'a, Blocker>) -> Value {
             };
             json!({ "type": "deviceEvent", "deviceID": hash(device_id), "event": event })
         },
-        Event::UserEvent(blocker) => {
-            *BLOCKER.lock().unwrap() = Some(blocker);
-            json!({ "type": "blocker" })
-        },
+        Event::UserEvent(_) => json!({ "type": "blocker" }),
         Event::Suspended => json!({ "type": "suspended" }),
         Event::Resumed => json!({ "type": "resumed" }),
         Event::MainEventsCleared => json!({ "type": "mainEventsCleared" }),
@@ -191,11 +189,10 @@ pub async fn op_next_event(_: Rc<RefCell<OpState>>, _: (), _: ()) -> Result<Valu
     .unwrap())
 }
 
-pub fn op_drop_blocker(_: &mut OpState, _: (), _: ()) -> Result<(), AnyError> {
-    let mut blocker = BLOCKER.lock().unwrap();
-    if let Some(block) = blocker.take() {
-        drop(block);
-        *blocker = None;
-    }
-    Ok(())
+pub fn init() -> Extension {
+    Extension::builder()
+        .ops(vec![
+            ("op_next_event", op_async(op_next_event)),
+        ])
+        .build()
 }
