@@ -1,4 +1,4 @@
-/target
+target/
 .test/
 .vscode/
 deno/

@@ -1,8 +1,8 @@
 # deno_desktop
 
-![demo](./assets/demo-hello-triangle.png)
-
 Windowing support for Deno WebGPU. In very early stages at the moment.
+
+![demo](./assets/demo-hello-triangle.png)
 
 ## Usage
 
@@ -12,6 +12,7 @@ const win = Deno.createWindow({
   width: 800,
   height: 600,
   resizable: false,
+  // ...
 });
 
 const surface = win.createSurface(device);
