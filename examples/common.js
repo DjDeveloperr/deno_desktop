@@ -1,7 +1,9 @@
 /** Base Application used by all examples */
 export class App {
-  constructor(title) {
+  constructor(title, width = 800, height = 600) {
     this.title = title;
+    this.width = width;
+    this.height = height;
   }
 
   // To be extended by subclasses
@@ -22,8 +24,8 @@ export class App {
 
     this.window = Deno.createWindow({
       title: this.title,
-      width: 800,
-      height: 600,
+      width: this.width,
+      height: this.height,
       resizable: false,
     });
 
@@ -69,5 +71,21 @@ export class App {
       label: name,
       code,
     });
+  }
+
+  createBuffer({ label, usage, data, size }) {
+    const buffer = this.device.createBuffer({
+      label,
+      usage,
+      size: ((data ? data.byteLength : size)  + 3) & ~3,
+      mappedAtCreation: data ? true : false,
+    });
+
+    if (data) {
+      new data.constructor(buffer.getMappedRange()).set(data);
+      buffer.unmap();
+    }
+
+    return buffer;
   }
 }

@@ -17,7 +17,7 @@ use crate::window;
 use crate::extra;
 
 fn get_error_class_name(e: &AnyError) -> &'static str {
-    deno_runtime::errors::get_error_class_name(e).unwrap_or("UnknownError")
+    deno_runtime::errors::get_error_class_name(e).unwrap_or("Error")
 }
 
 pub async fn start() -> Result<(), AnyError> {
