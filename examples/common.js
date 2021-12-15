@@ -1,3 +1,13 @@
+import { enableValidationErrors } from "./extern/gpu_err.bundle.js";
+import { Matrix4 } from "./extern/gmath.bundle.js";
+
+export const OPENGL_TO_WGPU_MATRIX = Matrix4.from(
+  1.0, 0.0, 0.0, 0.0,
+  0.0, 1.0, 0.0, 0.0,
+  0.0, 0.0, 0.5, 0.0,
+  0.0, 0.0, 0.5, 1.0,
+);
+
 /** Base Application used by all examples */
 export class App {
   constructor(title, width = 800, height = 600) {
@@ -9,6 +19,7 @@ export class App {
   // To be extended by subclasses
   async init() {}
   async render(_encoder, _view) {}
+  async onEvent(_event) {}
 
   mainLoop() {
     this.window.requestRedraw();
@@ -21,6 +32,7 @@ export class App {
     }
 
     this.device = await this.adapter.requestDevice();
+    enableValidationErrors(this.device, true);
 
     this.window = Deno.createWindow({
       title: this.title,
@@ -38,6 +50,7 @@ export class App {
     this.mainLoopInterval = setInterval(() => this.mainLoop(), 1000 / 60);
 
     for await (const event of Deno.eventLoop()) {
+      await this.onEvent(event);
       if (event.type === "windowEvent" && event.windowID === this.window.id) {
         if (event.event.type === "closeRequested") {
           this.cleanup();

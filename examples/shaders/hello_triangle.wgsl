@@ -1,5 +1,5 @@
 struct VertexInput {
-  [[location(0)]] pos: vec4<f32>;
+  [[location(0)]] pos: vec3<f32>;
   [[location(1)]] color: vec4<f32>;
 };
 
@@ -12,7 +12,7 @@ struct VertexOutput {
 fn vs_main(input: VertexInput) -> VertexOutput {
   var out: VertexOutput;
   out.color = input.color;
-  out.pos = input.pos;
+  out.pos = vec4<f32>(input.pos, 1.0);
   return out;
 }
 

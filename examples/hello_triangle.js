@@ -4,10 +4,10 @@ export class HelloTriangleApp extends App {
   constructor() {
     super("Hello Triangle");
 
-    const vertexes = [
-      [   0,  0.5, 0, 1],
-      [ 0.5, -0.5, 0, 1],
-      [-0.5, -0.5, 0, 1],
+    const vertices = [
+      [   0,  0.5, 0],
+      [ 0.5, -0.5, 0],
+      [-0.5, -0.5, 0],
     ];
 
     const colors = [
@@ -20,10 +20,12 @@ export class HelloTriangleApp extends App {
       0, 1, 2,
     ];
 
-    this.vertexes = new Float32Array(vertexes.length * 4 * 2);
-    for (let i = 0; i < vertexes.length; i++) {
-      this.vertexes.set(vertexes[i], i * 2 * 4);
-      this.vertexes.set(colors[i], i * 2 * 4 + 4);
+    this.vertices = new Float32Array(vertices.length * 3 + colors.length * 4);
+    for (let i = 0; i < vertices.length; i++) {
+      const vertex = vertices[i], color = colors[i];
+      const offset = i * vertex.length + i * color.length;
+      this.vertices.set(vertex, offset);
+      this.vertices.set(color, offset + vertex.length);
     }
 
     this.indices = new Uint16Array(indices);
@@ -34,7 +36,7 @@ export class HelloTriangleApp extends App {
 
     this.vertexBuffer = this.createBuffer({
       label: "Vertex Buffer",
-      data: this.vertexes,
+      data: this.vertices,
       usage: GPUBufferUsage.VERTEX,
     });
 
@@ -50,16 +52,16 @@ export class HelloTriangleApp extends App {
         entryPoint: "vs_main",
         buffers: [
           {
-            arrayStride: 4 * 4 * 2,
+            arrayStride: 4 * 3 + 4 * 4,
             stepMode: "vertex",
             attributes: [
               {
                 offset: 0,
                 shaderLocation: 0,
-                format: "float32x4",
+                format: "float32x3",
               },
               {
-                offset: 4 * 4,
+                offset: 4 * 3,
                 shaderLocation: 1,
                 format: "float32x4",
               },
