@@ -24,11 +24,11 @@ use winit_main::reexports::window::Theme;
 use crate::util::hash;
 use crate::EVENT_RECEIVER;
 
-fn serialize_physical_size<T: Serialize>(size: PhysicalSize<T>) -> Value {
+pub fn serialize_physical_size<T: Serialize>(size: PhysicalSize<T>) -> Value {
     json!({ "width": size.width, "height": size.height })
 }
 
-fn serialize_physical_position<T: Serialize>(pos: PhysicalPosition<T>) -> Value {
+pub fn serialize_physical_position<T: Serialize>(pos: PhysicalPosition<T>) -> Value {
     json!({ "x": pos.x, "y": pos.y })
 }
 

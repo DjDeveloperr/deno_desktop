@@ -1,12 +1,19 @@
-Deno.eventLoop = async function* () {
+Deno.nextEvent = function nextEvent() {
+  const promise = Deno.core.opAsync("op_next_event");
+  // Unref the op so that it does not keep event loop alive.
+  Deno.core.unrefOp(promise[Symbol.for("Deno.core.internalPromiseId")]);
+  return promise;
+}
+
+Deno.eventLoop = async function* eventLoop() {
   let event;
-  while ((event = (await Deno.core.opAsync("op_next_event")))) {
+  while ((event = (await Deno.nextEvent()))) {
     yield event;
   }
 };
 
-Deno.createWindow = function (options) {
-  return new WinitWindow(Deno.core.opSync("op_create_window", options), options);
+Deno.createWindow = function createWindow(options) {
+  return new WinitWindow(Deno.core.opSync("op_create_window", options));
 };
 
 let symbolCache = {};
@@ -32,6 +39,7 @@ class GPUCanvasContext {
   #rid;
   #rids;
   #baseTex;
+  #currentTexture;
 
   constructor(window, rid, rids, device) {
     this.#window = window;
@@ -67,16 +75,20 @@ class GPUCanvasContext {
       height: options.height ?? this.#window.height,
       usage: options.usage ?? GPUTextureUsage.RENDER_ATTACHMENT,
     });
+    this.#currentTexture = null;
   }
 
   present() {
-    return Deno.core.opSync("op_webgpu_surface_present", {
+    const status = Deno.core.opSync("op_webgpu_surface_present", {
       surfaceRid: this.#rid,
       adapterRid: this.#rids.adapter,
     });
+    this.#currentTexture = null;
+    return status;
   }
 
   getCurrentTexture() {
+    if (this.#currentTexture) return this.#currentTexture;
     const currentTextureRid = Deno.core.opSync(
       "op_webgpu_surface_get_current_texture",
       {
@@ -85,6 +97,7 @@ class GPUCanvasContext {
       }
     );
     this.#baseTex[getSymbolOf(this.#baseTex, "[[rid]]")] = currentTextureRid;
+    this.#currentTexture = this.#baseTex;
     return this.#baseTex;
   }
 
@@ -93,12 +106,16 @@ class GPUCanvasContext {
   }
 }
 
+globalThis.GPUCanvasContext = GPUCanvasContext;
+
 class WinitWindow {
   #rid;
   #id;
-  #visible;
-  #width;
-  #height;
+
+  constructor([id, rid]) {
+    this.#id = id;
+    this.#rid = rid;
+  }
 
   get rid() {
     return this.#rid;
@@ -107,33 +124,113 @@ class WinitWindow {
   get id() {
     return this.#id;
   }
-  
-  constructor([id, rid], options) {
-    this.#id = id;
-    this.#rid = rid;
-    this.#visible = options.visible ?? true;
-    this.#width = options.width ?? 800;
-    this.#height = options.height ?? 600;
-  }
-
-  get visible() {
-    return this.#visible;
-  }
-
-  set visible(visible) {
-    Deno.core.opSync("op_window_set_visible", [this.#rid, visible]);
-  }
 
   get width() {
-    return this.#width;
+    return this.getSize().width;
   }
   
   get height() {
-    return this.#height;
+    return this.getSize().height;
   }
 
   requestRedraw() {
     Deno.core.opSync("op_window_request_redraw", this.#rid);
+  }
+
+  requestUserAttention(type) {
+    Deno.core.opSync("op_window_request_user_attention", [this.#rid, type ?? null]);
+  }
+
+  getFullscreen() {
+    return Deno.core.opSync("op_window_fullscreen", this.#rid);
+  }
+
+  getInnerPosition() {
+    return Deno.core.opSync("op_window_inner_position", this.#rid);
+  }
+
+  getSize() {
+    return Deno.core.opSync("op_window_inner_size", this.#rid);
+  }
+
+  getOuterSize() {
+    return Deno.core.opSync("op_window_outer_size", this.#rid);
+  }
+
+  getScaleFactor() {
+    return Deno.core.opSync("op_window_scale_factor", this.#rid);
+  }
+
+  setAlwaysOnTop(value) {
+    Deno.core.opSync("op_window_set_always_on_top", [this.#rid, value]);
+  }
+
+  setCursorGrab(value) {
+    Deno.core.opSync("op_window_set_cursor_grab", [this.#rid, value]);
+  }
+
+  setCursorIcon(icon) {
+    Deno.core.opSync("op_window_set_cursor_icon", [this.#rid, icon]);
+  }
+
+  setCursorPosition(pos) {
+    Deno.core.opSync("op_window_set_cursor_position", [this.#rid, pos]);
+  }
+
+  setCursorVisible(value) {
+    Deno.core.opSync("op_window_set_cursor_visible", [this.#rid, value]);
+  }
+
+  setDecorations(value) {
+    Deno.core.opSync("op_window_set_decorations", [this.#rid, value]);
+  }
+
+  setFullscreen(fullscreen) {
+    Deno.core.opSync("op_window_set_fullscreen", [this.#rid, fullscreen]);
+  }
+
+  setImePosition(pos) {
+    Deno.core.opSync("op_window_set_ime_position", [this.#rid, pos]);
+  }
+
+  setSize(size) {
+    Deno.core.opSync("op_window_set_inner_size", [this.#rid, size]);
+  }
+
+  setMaxSize({ width, height }) {
+    Deno.core.opSync("op_window_set_max_inner_size", [this.#rid, width, height]);
+  }
+
+  setMaximized(value) {
+    Deno.core.opSync("op_window_set_maximized", [this.#rid, value]);
+  }
+
+  setMinSize({ width, height }) {
+    Deno.core.opSync("op_window_set_min_inner_size", [this.#rid, width, height]);
+  }
+
+  setMinimized(value) {
+    Deno.core.opSync("op_window_set_minimized", [this.#rid, value]);
+  }
+
+  setPosition(pos) {
+    Deno.core.opSync("op_window_set_outer_position", [this.#rid, pos]);
+  }
+
+  setResizable(value) {
+    Deno.core.opSync("op_window_set_resizable", [this.#rid, value]);
+  }
+
+  setTitle(title) {
+    Deno.core.opSync("op_window_set_title", [this.#rid, title]);
+  }
+
+  setVisible(value) {
+    Deno.core.opSync("op_window_set_visible", [this.#rid, value]);
+  }
+
+  setIcon({ data, width, height }) {
+    Deno.core.opSync("op_window_set_window_icon", [this.#rid, width, height], data);
   }
 
   createSurface(device) {
@@ -149,3 +246,5 @@ class WinitWindow {
     Deno.close(this.rid);
   }
 }
+
+Deno.WinitWindow = WinitWindow;

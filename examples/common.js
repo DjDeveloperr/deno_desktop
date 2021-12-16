@@ -38,12 +38,17 @@ export class App {
       title: this.title,
       width: this.width,
       height: this.height,
-      resizable: false,
+      resizable: true,
     });
 
     this.surface = this.window.createSurface(this.device);
+
     this.format = this.surface.getPreferredFormat();
-    this.surface.configure({ format: this.format });
+    this.surface.configure({
+      format: this.format,
+      width: this.width,
+      height: this.height,
+    });
 
     await this.init();
 
@@ -55,6 +60,14 @@ export class App {
         if (event.event.type === "closeRequested") {
           this.cleanup();
           Deno.exit(0);
+        } else if (event.event.type === "resized") {
+          this.width = event.event.width;
+          this.height = event.event.height;
+          this.surface.configure({
+            format: this.format,
+            width: this.width,
+            height: this.height,
+          });
         }
       } else if (event.type === "redrawRequested" && event.windowID === this.window.id) {
         const texture = this.surface.getCurrentTexture();
