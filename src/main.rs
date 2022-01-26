@@ -3,7 +3,6 @@ extern crate lazy_static;
 
 mod runtime;
 mod event_loop;
-mod surface;
 mod util;
 mod window;
 mod extra;

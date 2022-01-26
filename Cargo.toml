@@ -5,7 +5,7 @@ edition = "2021"
 resolver = "2"
 
 [dependencies]
-deno_runtime = { git = "https://github.com/DjDeveloperr/deno.git", rev = "961851925567152fe98f08ca6b842f8f7c05b679" }
+deno_runtime = { git = "https://github.com/DjDeveloperr/deno.git", rev = "c4bfee9b42d53078ef7bf7de0a13a36b112611eb" }
 # deno_runtime = { path = "./deno/runtime" }
 winit-main = { version = "0.1.3", features = ["proc"] }
 tokio = { version = "1", features = ["full"] }

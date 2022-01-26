@@ -19,27 +19,13 @@ use winit_main::reexports::dpi::PhysicalPosition;
 use raw_window_handle::RawWindowHandle;
 use raw_window_handle::HasRawWindowHandle;
 use deno_runtime::deno_core::serde_json::Value;
+use deno_runtime::deno_webgpu::surface::DynHasRawWindowHandle;
+use deno_runtime::deno_webgpu::surface::WindowResource;
 
 use crate::EVENT_LOOP;
 use crate::util::hash;
 use crate::event_loop::serialize_physical_position;
 use crate::event_loop::serialize_physical_size;
-
-pub struct DynHasRawWindowHandle(pub Box<dyn HasRawWindowHandle>);
-
-unsafe impl HasRawWindowHandle for DynHasRawWindowHandle {
-    fn raw_window_handle(&self) -> RawWindowHandle {
-        self.0.raw_window_handle()
-    }
-}
-
-pub struct WindowResource(pub DynHasRawWindowHandle);
-
-impl Resource for WindowResource {
-    fn name(&self) -> std::borrow::Cow<str> {
-        "Window".into()
-    }
-}
 
 #[derive(Deserialize)]
 #[serde(rename_all = "camelCase")]

@@ -42,9 +42,7 @@ pub async fn start() -> Result<(), AnyError> {
         extensions: vec![
             event_loop::init(),
             window::init(),
-            // Will be integrated into deno_webgpu later.
-            // https://github.com/gfx-rs/wgpu/pull/2279
-            surface::init(),
+            deno_runtime::deno_webgpu::init_surface_ext(),
             // Some ops deno_runtime depends on
             // But aren't there (implemented in CLI)
             // https://github.com/denoland/deno/issues/12918
