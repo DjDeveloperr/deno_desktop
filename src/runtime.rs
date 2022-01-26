@@ -12,7 +12,6 @@ use std::rc::Rc;
 use std::sync::Arc;
 
 use crate::event_loop;
-use crate::surface;
 use crate::window;
 use crate::extra;
 
